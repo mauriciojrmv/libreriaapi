@@ -1,9 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
-// Importaciones de controladores
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
@@ -17,26 +14,20 @@ use App\Http\Controllers\SaleDetailController;
 | API Routes
 |--------------------------------------------------------------------------
 |
-| Aquí es donde puedes registrar rutas API para tu aplicación. Estas
-| rutas son cargadas por el RouteServiceProvider dentro de un grupo que
-| se asigna al grupo de middleware "api". ¡Disfruta construyendo tu API!
+| Aquí es donde puedes registrar rutas API para tu aplicación.
 |
 */
 
-// Rutas que no requieren autenticación
+// Ruta para el login. Esta ruta puede mantenerse para generar tokens si es necesario.
 Route::post('/login', [AuthController::class, 'login']);
 
-// Rutas protegidas con Sanctum
-Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::apiResource('users', UserController::class);
-    Route::apiResource('categories', CategoryController::class);
-    Route::apiResource('products', ProductController::class);
-    Route::apiResource('customers', CustomerController::class);
-    Route::apiResource('sales', SaleController::class);
-    Route::apiResource('saledetails', SaleDetailController::class);
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
-});
+// Rutas API que no requieren autenticación
+Route::apiResource('users', UserController::class);
+Route::apiResource('categories', CategoryController::class);
+Route::apiResource('products', ProductController::class);
+Route::apiResource('customers', CustomerController::class);
+Route::apiResource('sales', SaleController::class);
+Route::apiResource('saledetails', SaleDetailController::class);
 
+// Ruta opcional para obtener el usuario autenticado si se mantiene la funcionalidad de login
+Route::get('/user', [AuthController::class, 'user'])->middleware('auth:sanctum');
