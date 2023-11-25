@@ -81,6 +81,11 @@ class SaleDetailController extends Controller
         return response()->json($saleDetail);
     }
 
+    public function getSaleDetailsBySaleId($saleId) {
+        $details = SaleDetail::where('SaleID', $saleId)->with(['sale', 'product'])->get();
+        return response()->json($details);
+    }
+
     public function destroy($id)
     {
         // Elimina el detalle de la venta
